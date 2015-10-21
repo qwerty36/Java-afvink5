@@ -22,19 +22,21 @@ public class translatorinator extends JFrame implements ActionListener {
 
     public static void main(String[] args) {
         translatorinator frame = new translatorinator();
-        frame.setSize(1000, 1000);
+        frame.setSize(1000, 200);
         frame.CreateGUI();
         frame.setVisible(true);
     }
 
     public void CreateGUI() {
+        setTitle("Translatorinator v9001");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         Container window = getContentPane();
         jp = new JPanel();
         jp.setLayout(new FlowLayout());
         jta = new JTextArea(3, 20);
         jta.setText(" ");
-        jl = new JLabel("Input 1-Lettercode");
-        jl2 = new JLabel("Input 3-Lettercode");
+        jl = new JLabel("Input single digit AA");
+        jl2 = new JLabel("Input triple digit AA");
         jb = new JButton("Translate");
         jb.addActionListener(this);
         jta2 = new JTextArea(3, 20);
@@ -47,22 +49,26 @@ public class translatorinator extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent event) {
-        if (jta2.getText().length() == 0) {
-            String seq = jta.getText();
-            String final_seq = "";
-            for (int i = 0; i < seq.length(); i++) {
-                String temp_aa = "" + seq.charAt(i);
-                String temp_aa1 = vertaal(temp_aa);
-                final_seq += temp_aa1 + "-";
+        try {
+            if (jta2.getText().length() == 0) {
+                String seq = jta.getText();
+                String final_seq = "";
+                for (int i = 0; i < seq.length(); i++) {
+                    String temp_aa = "" + seq.charAt(i);
+                    String temp_aa1 = vertaal(temp_aa);
+                    final_seq += temp_aa1 + "-";
+                }
+                jta2.setText(final_seq);
+            } else {
+                String seq = jta2.getText();
+                String final_seq = "";
+                for (int i = 0; i < seq.length(); i += 3) {
+                    final_seq += vertaal(seq.substring(i, i + 3));
+                }
+                jta.setText(final_seq);
             }
-            jta2.setText(final_seq);
-        } else {
-            String seq = jta2.getText();
-            String final_seq = "";
-            for (int i = 0; i < seq.length(); i += 3) {
-                final_seq += vertaal(seq.substring(i, i + 3));
-            }
-            jta.setText(final_seq);
+        } catch (IndexOutOfBoundsException e) {
+            System.err.println("got an error dawg, IndexOutOfBoundsException: " + e.getMessage());
         }
     }
 
